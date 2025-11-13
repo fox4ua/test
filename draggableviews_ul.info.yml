@@ -1,0 +1,8 @@
+name: 'DraggableViews Unformatted'
+type: module
+description: 'Drag-and-drop сортировка DraggableViews для форматов "Неформатований список" и "HTML List" без отдельного дисплея.'
+core_version_requirement: ^10.3 || ^11
+package: 'Views'
+dependencies:
+  - drupal:views
+  - draggableviews:draggableviews

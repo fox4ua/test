@@ -1,0 +1,10 @@
+ul_sortables:
+  css:
+    theme:
+      css/draggableviews_ul.css: {}
+  js:
+    js/draggableviews_ul.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/sortable

@@ -1,0 +1,60 @@
+<?php
+
+declare(strict_types=1);
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Вешаемся на форму View, где используется DraggableViews,
+ * и включаем drag&drop для стилей unformatted / html_list.
+ * Отдельный дисплей для сортировки не нужен — порядок
+ * сохраняется и используется этим же дисплеем.
+ */
+function draggableviews_ul_form_alter(array &$form, FormStateInterface $form_state, $form_id): void {
+  // Нас интересуют только формы, созданные Views.
+  if (empty($form['#view']) || !$form['#view'] instanceof ViewExecutable) {
+    return;
+  }
+
+  /** @var \Drupal\views\ViewExecutable $view */
+  $view = $form['#view'];
+
+  // Стиль отображения.
+  $style = $view->getStyle();
+  if (!$style) {
+    return;
+  }
+
+  $style_id = $style->getPluginId();
+
+  // Для table DraggableViews уже использует tabledrag.js — не трогаем.
+  if ($style_id === 'table') {
+    return;
+  }
+
+  // Нас интересуют только "Неформатований список" и "HTML List".
+  if (!in_array($style_id, ['unformatted', 'html_list'], TRUE)) {
+    return;
+  }
+
+  // Это должен быть именно сортирующий дисплей DraggableViews
+  // с кнопкой "Сохранить порядок".
+  if (empty($form['actions']['save_order'])) {
+    return;
+  }
+
+  // Гарантируем стабильный id формы для группы Sortable.
+  if (empty($form['#attributes']['id'])) {
+    $form['#attributes']['id'] = Html::getUniqueId($form_id);
+  }
+
+  // Помечаем форму классом, чтобы JS её нашёл.
+  $form['#attributes']['class'][] = 'draggableviews-ul-form';
+
+  // Подключаем нашу библиотеку с JS/CSS.
+  $form['#attached']['library'][] = 'draggableviews_ul/ul_sortables';
+}

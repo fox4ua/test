@@ -1,0 +1,14 @@
+/* Курсор "рука" на строках списка. */
+.draggableviews-ul-form .views-row {
+  cursor: move;
+}
+
+/* Призрачный элемент во время перетаскивания (класс SortableJS). */
+.draggableviews-ul-form .sortable-ghost {
+  opacity: 0.4;
+}
+
+/* Прячем техническое поле DraggableViews (вес), чтобы не ломать дизайн. */
+.draggableviews-ul-form .views-field-draggableviews {
+  display: none;
+}
